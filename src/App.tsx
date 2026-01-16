@@ -19,9 +19,7 @@ function App() {
   // Navigation State
   const [activeTab, setActiveTab] = useState<Tab>('groups');
 
-  // Group Context State might be needed later for logic, but for now cleaning up unused
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [currentGroup, setCurrentGroup] = useState<string>('Product Team');
+
 
   useEffect(() => {
     // 1. Init Mini App
