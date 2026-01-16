@@ -27,10 +27,14 @@ function App() {
       if (mountMiniApp.isSupported()) {
         mountMiniApp();
         miniAppReady();
-        // Request full screen
+        // Request full screen & consistent branding
         if (typeof window !== 'undefined' && (window as any).Telegram?.WebApp) {
-          (window as any).Telegram.WebApp.expand();
-          (window as any).Telegram.WebApp.disableVerticalSwipes();
+          const tg = (window as any).Telegram.WebApp;
+          tg.expand();
+          tg.disableVerticalSwipes();
+          // Match Milky White background
+          tg.setHeaderColor('#FAFAF9');
+          tg.setBackgroundColor('#FAFAF9');
         }
       }
     } catch (e) {

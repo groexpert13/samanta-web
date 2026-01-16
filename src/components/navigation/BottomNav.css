@@ -1,37 +1,47 @@
+/* 
+   Modern "Floating Dock" Navigation 
+   Stable layout, no shifting, premium feel
+*/
+
 .bottom-nav-container {
     position: fixed;
-    bottom: calc(24px + var(--safe-area-bottom));
+    bottom: calc(20px + var(--safe-area-bottom));
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
+
     width: auto;
-    /* Ensure it doesn't touch edges on small screens */
-    max-width: calc(100vw - 32px);
-    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.2));
+    /* Determine width based on content but keep it compact */
+    min-width: 280px;
+
+    /* Strong Drop Shadow for depth */
+    filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.2));
 }
 
 .bottom-nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 4px;
+    padding: 6px 8px;
+    gap: 8px;
 
     /* Premium Glassmorphism */
-    background: rgba(28, 28, 30, 0.65);
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    background: rgba(30, 30, 30, 0.85);
+    /* Darker base for contrast */
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
 
-    border-radius: 100px;
-    padding: 5px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 28px;
+    /* Smooth pill shape */
+    border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-/* Light theme adaptation */
+/* Light Theme Mode */
 @media (prefers-color-scheme: light) {
     .bottom-nav {
-        background: rgba(255, 255, 255, 0.7);
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        background: rgba(255, 255, 255, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
 }
 
@@ -39,20 +49,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
+
+    width: 56px;
+    height: 56px;
+    border-radius: 20px;
+    /* Squircle */
+
     border: none;
     cursor: pointer;
-
     background: transparent;
-    color: var(--tg-theme-hint-color, #8E8E93);
+    color: var(--tg-theme-hint-color, #999);
 
-    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
     position: relative;
-    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 
-    /* Tap highlight removal */
+    /* Remove tap highlight */
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -60,44 +71,28 @@
     width: 26px;
     height: 26px;
     stroke-width: 2px;
-    transition: stroke 0.3s ease;
+    transition: transform 0.3s ease, stroke 0.3s ease;
 }
 
+/* Active State: 
+   Instead of resizing, we change background and color.
+   Stable layout = No jitter.
+*/
 .nav-item.active {
     background: #FFD45E;
-    /* Vibrant yellow/gold */
+    /* Vibrant Yellow */
     color: #1c1c1e;
 
-    /* Icon-only mode: Keep it circular/pill but consistent */
-    width: 52px;
-    min-width: 52px;
-    padding: 0;
-    border-radius: 50%;
-
-    /* Subtle glow for active state */
-    box-shadow: 0 0 15px rgba(255, 212, 94, 0.4);
+    /* Slight lift */
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 212, 94, 0.4);
 }
 
-/* Label is removed in TSX, but clean up CSS */
+/* Click effect */
+.nav-item:active {
+    transform: scale(0.92);
+}
+
 .nav-label {
     display: none;
-}
-
-/* Removed @keyframes slideIn */
-
-/* Specific icon adjustments */
-.nav-item:not(.active) svg {
-    stroke: var(--tg-theme-hint-color, #999);
-    opacity: 0.8;
-}
-
-.nav-item:not(.active):active {
-    transform: scale(0.92);
-    background: rgba(255, 255, 255, 0.05);
-}
-
-/* Active state is always dark text on yellow bg */
-.nav-item.active svg {
-    stroke: #1c1c1e;
 }
