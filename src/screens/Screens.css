@@ -1,7 +1,10 @@
 .screen-container {
     padding: 16px;
-    padding-bottom: calc(90px + var(--safe-area-bottom));
-    /* Header height + Nav height + Safe area */
+    /* Top padding must respect safe area */
+    padding-top: calc(16px + var(--safe-area-top));
+    /* Bottom padding clears the navigation bar */
+    padding-bottom: calc(100px + var(--safe-area-bottom));
+
     min-height: 100vh;
     box-sizing: border-box;
 }

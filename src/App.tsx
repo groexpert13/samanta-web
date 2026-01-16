@@ -5,7 +5,6 @@ import './App.css';
 
 // Components
 import BottomNav, { type Tab } from './components/navigation/BottomNav';
-import Header from './components/layout/Header';
 
 // Screens
 import GroupsScreen from './screens/GroupsScreen';
@@ -20,9 +19,9 @@ function App() {
   // Navigation State
   const [activeTab, setActiveTab] = useState<Tab>('groups');
 
-  // Group Context State
+  // Group Context State might be needed later for logic, but for now cleaning up unused
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentGroup, setCurrentGroup] = useState<string>('Product Team');
-  const [userRole] = useState<string>('Admin');
 
   useEffect(() => {
     // 1. Init Mini App
@@ -30,6 +29,11 @@ function App() {
       if (mountMiniApp.isSupported()) {
         mountMiniApp();
         miniAppReady();
+        // Request full screen
+        if (typeof window !== 'undefined' && (window as any).Telegram?.WebApp) {
+          (window as any).Telegram.WebApp.expand();
+          (window as any).Telegram.WebApp.disableVerticalSwipes();
+        }
       }
     } catch (e) {
       console.warn("MiniApp init failed", e);
@@ -81,10 +85,6 @@ function App() {
     checkUser();
   }, []);
 
-  const handleSwitchGroup = () => {
-    // Mock switching logic for demo
-    setCurrentGroup(prev => prev === 'Product Team' ? 'Family Chat' : 'Product Team');
-  };
 
   // Screen Rendering Logic
   const renderScreen = () => {
@@ -104,15 +104,8 @@ function App() {
 
   return (
     <div className="app-container">
-      {/* Group-First Header: Always visible */}
-      <Header
-        groupName={currentGroup}
-        role={userRole}
-        onSwitchGroup={handleSwitchGroup}
-      />
-
-      {/* Main Content Area */}
-      <main>
+      {/* Main Content Area - Full Screen */}
+      <main className="main-content">
         {renderScreen()}
       </main>
 
