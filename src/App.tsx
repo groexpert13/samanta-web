@@ -5,6 +5,8 @@ import './App.css';
 
 // Components
 import BottomNav, { type Tab } from './components/navigation/BottomNav';
+import SplashScreen from './components/common/SplashScreen';
+import Header from './components/navigation/Header';
 
 // Screens
 import GroupsScreen from './screens/GroupsScreen';
@@ -14,12 +16,12 @@ import SettingsScreen from './screens/SettingsScreen';
 
 function App() {
   const [username, setUsername] = useState<string | null>(null);
+  const [userPhoto, setUserPhoto] = useState<string | null>(null);
   const [dbStatus, setDbStatus] = useState<string>('Checking DB...');
+  const [isLoading, setIsLoading] = useState(true);
 
   // Navigation State
   const [activeTab, setActiveTab] = useState<Tab>('groups');
-
-
 
   useEffect(() => {
     // 1. Init Mini App
@@ -53,13 +55,11 @@ function App() {
           firstName = lp.initData.user.firstName;
           telegramId = lp.initData.user.id;
           setUsername(firstName || 'User');
+          setUserPhoto(lp.initData.user.photoUrl || null);
         }
       } catch (e) {
         console.warn("LaunchParams failed", e);
         setDbStatus("No Telegram Data (Local Dev?)");
-        // For testing locally
-        // telegramId = 123456789; 
-        return;
       }
 
       if (telegramId) {
@@ -82,6 +82,10 @@ function App() {
           setDbStatus(`Conn Error: ${err.message}`);
         }
       }
+
+      // Minimum loading time for aesthetic purposes if needed, 
+      // but usually the DB check is enough.
+      setIsLoading(false);
     };
 
     checkUser();
@@ -104,8 +108,14 @@ function App() {
     }
   };
 
+  if (isLoading) {
+    return <SplashScreen />;
+  }
+
   return (
     <div className="app-container">
+      <Header firstName={username} photoUrl={userPhoto} />
+
       {/* Main Content Area - Full Screen */}
       <main className="main-content">
         {renderScreen()}
