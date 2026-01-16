@@ -30,9 +30,13 @@ body {
   min-width: 320px;
   min-height: 100vh;
 
-  /* Apply Telegram Theme Variables */
-  background-color: var(--tg-theme-bg-color);
-  color: var(--tg-theme-text-color);
+  /* Vibrant Blue Background from Reference */
+  background-color: #007AFF;
+  /* Fallback */
+  background: linear-gradient(180deg, #007AFF 0%, #0056B3 100%);
+  /* Subtle gradient for depth */
+
+  color: var(--tg-theme-text-color, #ffffff);
 
   /* Prevent scroll chaining and elastic bounce where irrelevant */
   overscroll-behavior-y: none;

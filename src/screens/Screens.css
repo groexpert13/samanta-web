@@ -1,9 +1,9 @@
 .screen-container {
     padding: 16px;
-    /* Top padding must respect safe area */
-    padding-top: calc(16px + var(--safe-area-top));
+    /* Top padding must respect safe area AND Telegram header */
+    padding-top: calc(20px + var(--safe-area-top) + var(--tg-content-safe-area-inset-top, 0px));
     /* Bottom padding clears the navigation bar */
-    padding-bottom: calc(100px + var(--safe-area-bottom));
+    padding-bottom: calc(110px + var(--safe-area-bottom));
 
     min-height: 100vh;
     box-sizing: border-box;

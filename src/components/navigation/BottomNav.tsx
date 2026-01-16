@@ -1,4 +1,5 @@
 import React from 'react';
+import { hapticFeedback } from '@telegram-apps/sdk-react';
 import './BottomNav.css';
 
 export type Tab = 'groups' | 'assistants' | 'billing' | 'settings';
@@ -48,12 +49,20 @@ const Icons = {
 };
 
 const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) => {
+    const handleTabClick = (tab: Tab) => {
+        // Trigger Haptic Feedback
+        if (hapticFeedback.isSupported()) {
+            hapticFeedback.impactOccurred('medium');
+        }
+        onTabChange(tab);
+    };
+
     return (
         <div className="bottom-nav-container">
             <div className="bottom-nav">
                 <button
                     className={`nav-item ${activeTab === 'groups' ? 'active' : ''}`}
-                    onClick={() => onTabChange('groups')}
+                    onClick={() => handleTabClick('groups')}
                 >
                     <Icons.Groups />
                     {activeTab === 'groups' && <span className="nav-label">Groups</span>}
@@ -61,7 +70,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) => {
 
                 <button
                     className={`nav-item ${activeTab === 'assistants' ? 'active' : ''}`}
-                    onClick={() => onTabChange('assistants')}
+                    onClick={() => handleTabClick('assistants')}
                 >
                     <Icons.Assistants />
                     {activeTab === 'assistants' && <span className="nav-label">Agents</span>}
@@ -69,7 +78,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) => {
 
                 <button
                     className={`nav-item ${activeTab === 'billing' ? 'active' : ''}`}
-                    onClick={() => onTabChange('billing')}
+                    onClick={() => handleTabClick('billing')}
                 >
                     <Icons.Billing />
                     {activeTab === 'billing' && <span className="nav-label">Billing</span>}
@@ -77,7 +86,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) => {
 
                 <button
                     className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`}
-                    onClick={() => onTabChange('settings')}
+                    onClick={() => handleTabClick('settings')}
                 >
                     <Icons.Settings />
                     {activeTab === 'settings' && <span className="nav-label">Profile</span>}
