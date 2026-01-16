@@ -22,8 +22,7 @@ function App() {
 
   // Group Context State
   const [currentGroup, setCurrentGroup] = useState<string>('Product Team');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [userRole, setUserRole] = useState<string>('Admin');
+  const [userRole] = useState<string>('Admin');
 
   useEffect(() => {
     // 1. Init Mini App
