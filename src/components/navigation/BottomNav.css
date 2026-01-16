@@ -1,0 +1,117 @@
+.bottom-nav-container {
+    position: fixed;
+    bottom: calc(24px + var(--safe-area-bottom));
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: auto;
+    /* Ensure it doesn't touch edges on small screens */
+    max-width: calc(100vw - 32px);
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.2));
+}
+
+.bottom-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+
+    /* Premium Glassmorphism */
+    background: rgba(28, 28, 30, 0.65);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+
+    border-radius: 100px;
+    padding: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Light theme adaptation */
+@media (prefers-color-scheme: light) {
+    .bottom-nav {
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+
+    background: transparent;
+    color: var(--tg-theme-hint-color, #8E8E93);
+
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    position: relative;
+    overflow: hidden;
+
+    /* Tap highlight removal */
+    -webkit-tap-highlight-color: transparent;
+}
+
+.nav-item svg {
+    width: 26px;
+    height: 26px;
+    stroke-width: 2px;
+    transition: stroke 0.3s ease;
+}
+
+.nav-item.active {
+    background: #FFD45E;
+    /* Vibrant yellow/gold */
+    color: #1c1c1e;
+    width: auto;
+    min-width: 52px;
+    padding: 0 22px;
+    border-radius: 30px;
+}
+
+.nav-label {
+    display: inline-block;
+    margin-left: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    white-space: nowrap;
+    letter-spacing: -0.3px;
+    overflow: hidden;
+
+    /* Animation for text reveal */
+    animation: slideIn 0.35s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        max-width: 0;
+        transform: translateX(10px);
+    }
+
+    to {
+        opacity: 1;
+        max-width: 100px;
+        transform: translateX(0);
+    }
+}
+
+/* Specific icon adjustments */
+.nav-item:not(.active) svg {
+    stroke: var(--tg-theme-hint-color, #999);
+    opacity: 0.8;
+}
+
+.nav-item:not(.active):active {
+    transform: scale(0.92);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Active state is always dark text on yellow bg */
+.nav-item.active svg {
+    stroke: #1c1c1e;
+}

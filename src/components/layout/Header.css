@@ -1,0 +1,84 @@
+.group-header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 500;
+
+    /* Translucent Blur Effect */
+    background-color: var(--tg-theme-header-bg-color, rgba(28, 28, 30, 0.85));
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+
+    padding-top: var(--safe-area-top);
+    padding-bottom: 12px;
+    border-bottom: 0.5px solid rgba(128, 128, 128, 0.15);
+    transition: background-color 0.3s ease;
+}
+
+/* On light mode, ensure good contrast/color */
+@media (prefers-color-scheme: light) {
+    .group-header {
+        background-color: rgba(255, 255, 255, 0.85);
+    }
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 12px;
+}
+
+.group-avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    /* Smoother corners */
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: white;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+}
+
+.group-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.group-name {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--tg-theme-text-color);
+    line-height: 1.2;
+    letter-spacing: -0.4px;
+}
+
+.group-role {
+    font-size: 13px;
+    color: var(--tg-theme-hint-color);
+    margin-top: 2px;
+    font-weight: 400;
+}
+
+.change-group-btn {
+    margin-left: auto;
+    font-size: 14px;
+    color: var(--tg-theme-link-color, #3390ec);
+    background: rgba(51, 144, 236, 0.1);
+    border: none;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    transition: background 0.2s;
+}
+
+.change-group-btn:active {
+    background: rgba(51, 144, 236, 0.2);
+    transform: scale(0.98);
+}

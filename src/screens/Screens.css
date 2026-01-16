@@ -1,0 +1,22 @@
+.screen-container {
+    padding: 16px;
+    padding-bottom: calc(90px + var(--safe-area-bottom));
+    /* Header height + Nav height + Safe area */
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.screen-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--tg-theme-text-color);
+}
+
+.card {
+    background: var(--tg-theme-secondary-bg-color, #2c2c2c);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}

@@ -3,9 +3,27 @@ import { useEffect, useState } from 'react';
 import { supabase } from './lib/supabase';
 import './App.css';
 
+// Components
+import BottomNav, { type Tab } from './components/navigation/BottomNav';
+import Header from './components/layout/Header';
+
+// Screens
+import GroupsScreen from './screens/GroupsScreen';
+import AssistantsScreen from './screens/AssistantsScreen';
+import BillingScreen from './screens/BillingScreen';
+import SettingsScreen from './screens/SettingsScreen';
+
 function App() {
   const [username, setUsername] = useState<string | null>(null);
   const [dbStatus, setDbStatus] = useState<string>('Checking DB...');
+
+  // Navigation State
+  const [activeTab, setActiveTab] = useState<Tab>('groups');
+
+  // Group Context State
+  const [currentGroup, setCurrentGroup] = useState<string>('Product Team');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [userRole, setUserRole] = useState<string>('Admin');
 
   useEffect(() => {
     // 1. Init Mini App
@@ -34,7 +52,7 @@ function App() {
       } catch (e) {
         console.warn("LaunchParams failed", e);
         setDbStatus("No Telegram Data (Local Dev?)");
-        // For testing locally, you could hardcode an ID here if needed
+        // For testing locally
         // telegramId = 123456789; 
         return;
       }
@@ -64,29 +82,46 @@ function App() {
     checkUser();
   }, []);
 
+  const handleSwitchGroup = () => {
+    // Mock switching logic for demo
+    setCurrentGroup(prev => prev === 'Product Team' ? 'Family Chat' : 'Product Team');
+  };
+
+  // Screen Rendering Logic
+  const renderScreen = () => {
+    switch (activeTab) {
+      case 'groups':
+        return <GroupsScreen />;
+      case 'assistants':
+        return <AssistantsScreen />;
+      case 'billing':
+        return <BillingScreen />;
+      case 'settings':
+        return <SettingsScreen username={username} dbStatus={dbStatus} />;
+      default:
+        return <GroupsScreen />;
+    }
+  };
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white p-4">
-      <h1 className="text-3xl font-bold mb-4">AI Manager Bot</h1>
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center max-w-sm w-full">
-        {username ? (
-          <p className="text-xl mb-4">Hello, <span className="text-blue-400 font-bold">{username}</span>! 👋</p>
-        ) : (
-          <p className="text-xl mb-4">Hello! 👋</p>
-        )}
+    <div className="app-container">
+      {/* Group-First Header: Always visible */}
+      <Header
+        groupName={currentGroup}
+        role={userRole}
+        onSwitchGroup={handleSwitchGroup}
+      />
 
-        <div className="mt-4 p-3 bg-gray-700 rounded text-sm">
-          <p className="text-gray-300 font-semibold">Database Status:</p>
-          <p className={`font-mono mt-1 ${dbStatus.startsWith('Trial') ? 'text-green-400' : 'text-yellow-400'}`}>
-            {dbStatus}
-          </p>
-        </div>
+      {/* Main Content Area */}
+      <main>
+        {renderScreen()}
+      </main>
 
-        <p className="text-gray-400 text-sm mt-6">
-          {username
-            ? "Welcome back to your AI command center."
-            : "Open this app in Telegram to see your profile."}
-        </p>
-      </div>
+      {/* Floating Bottom Navigation */}
+      <BottomNav
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+      />
     </div>
   );
 }
