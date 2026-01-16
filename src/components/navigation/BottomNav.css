@@ -67,8 +67,7 @@
     -webkit-tap-highlight-color: transparent;
 }
 
-.nav-item svg,
-.nav-icon-img {
+.nav-item svg {
     width: 28px;
     height: 28px;
     stroke-width: 2px;
@@ -76,8 +75,10 @@
 }
 
 .nav-icon-img {
+    width: 56px;
+    height: 56px;
     object-fit: contain;
-    /* Optional: Slightly desaturate when not active if needed */
+    transition: filter 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
     filter: grayscale(0.2) opacity(0.8);
 }
 
