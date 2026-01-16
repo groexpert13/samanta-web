@@ -17,9 +17,12 @@
 }
 
 .card {
-    background: var(--tg-theme-secondary-bg-color, #2c2c2c);
+    background: rgba(255, 255, 255, 0.6);
+    /* Milky semi-transparent */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: 12px;
     padding: 16px;
     margin-bottom: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
 }
