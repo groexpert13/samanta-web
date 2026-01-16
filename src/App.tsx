@@ -1,33 +1,67 @@
-import { initInitData, initMiniApp } from '@telegram-apps/sdk-react';
+import { retrieveLaunchParams, mountMiniApp, miniAppReady } from '@telegram-apps/sdk-react';
 import { useEffect, useState } from 'react';
+import { supabase } from './lib/supabase';
 import './App.css';
 
 function App() {
   const [username, setUsername] = useState<string | null>(null);
+  const [dbStatus, setDbStatus] = useState<string>('Checking DB...');
 
   useEffect(() => {
+    // 1. Init Mini App
     try {
-      // Initialize the Mini App logic
-      try {
-        const [miniApp] = initMiniApp();
-        miniApp.ready();
-      } catch (e) {
-         console.warn("Failed to init MiniApp (outside Telegram?)", e);
+      if (mountMiniApp.isSupported()) {
+        mountMiniApp();
+        miniAppReady();
       }
+    } catch (e) {
+      console.warn("MiniApp init failed", e);
+    }
 
-      // Get init data
+    // 2. Get User & Check DB
+    const checkUser = async () => {
+      let telegramId: number | undefined;
+      let firstName: string | undefined;
+
       try {
-        const [initData] = initInitData();
-        if (initData && initData.user) {
-          setUsername(initData.user.firstName);
+        // Use retrieveLaunchParams instead of hooks to avoid crash on non-TG environment
+        const lp = retrieveLaunchParams() as any;
+        if (lp.initData && lp.initData.user) {
+          firstName = lp.initData.user.firstName;
+          telegramId = lp.initData.user.id;
+          setUsername(firstName || 'User');
         }
       } catch (e) {
-         console.warn("Failed to get InitData (outside Telegram?)", e);
+        console.warn("LaunchParams failed", e);
+        setDbStatus("No Telegram Data (Local Dev?)");
+        // For testing locally, you could hardcode an ID here if needed
+        // telegramId = 123456789; 
+        return;
       }
-      
-    } catch (e) {
-      console.error('Telegram SDK Error', e);
-    }
+
+      if (telegramId) {
+        try {
+          const { data, error } = await supabase
+            .from('users')
+            .select('trial_ends_at')
+            .eq('telegram_id', telegramId)
+            .single();
+
+          if (error) {
+            setDbStatus(`DB Error: ${error.message}`);
+          } else if (data) {
+            const trialDate = data.trial_ends_at ? new Date(data.trial_ends_at).toLocaleDateString() : 'Active';
+            setDbStatus(`Trial until: ${trialDate}`);
+          } else {
+            setDbStatus("User not found in DB (Start bot first?)");
+          }
+        } catch (err: any) {
+          setDbStatus(`Conn Error: ${err.message}`);
+        }
+      }
+    };
+
+    checkUser();
   }, []);
 
   return (
@@ -39,9 +73,17 @@ function App() {
         ) : (
           <p className="text-xl mb-4">Hello! 👋</p>
         )}
-        <p className="text-gray-400 text-sm">
-          {username 
-            ? "Welcome back to your AI command center." 
+
+        <div className="mt-4 p-3 bg-gray-700 rounded text-sm">
+          <p className="text-gray-300 font-semibold">Database Status:</p>
+          <p className={`font-mono mt-1 ${dbStatus.startsWith('Trial') ? 'text-green-400' : 'text-yellow-400'}`}>
+            {dbStatus}
+          </p>
+        </div>
+
+        <p className="text-gray-400 text-sm mt-6">
+          {username
+            ? "Welcome back to your AI command center."
             : "Open this app in Telegram to see your profile."}
         </p>
       </div>
