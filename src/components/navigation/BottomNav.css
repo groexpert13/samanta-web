@@ -67,11 +67,18 @@
     -webkit-tap-highlight-color: transparent;
 }
 
-.nav-item svg {
-    width: 26px;
-    height: 26px;
+.nav-item svg,
+.nav-icon-img {
+    width: 28px;
+    height: 28px;
     stroke-width: 2px;
-    transition: transform 0.3s ease, stroke 0.3s ease;
+    transition: transform 0.3s ease, stroke 0.3s ease, filter 0.3s ease;
+}
+
+.nav-icon-img {
+    object-fit: contain;
+    /* Optional: Slightly desaturate when not active if needed */
+    filter: grayscale(0.2) opacity(0.8);
 }
 
 /* Active State: 
@@ -86,6 +93,11 @@
     /* Slight lift */
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(255, 212, 94, 0.4);
+}
+
+.nav-item.active .nav-icon-img {
+    filter: none;
+    opacity: 1;
 }
 
 /* Click effect */

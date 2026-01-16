@@ -1,4 +1,4 @@
-import { retrieveLaunchParams, mountMiniApp, miniAppReady } from '@telegram-apps/sdk-react';
+import { retrieveLaunchParams, mountMiniApp, miniAppReady, init, mountViewport, requestFullscreen } from '@telegram-apps/sdk-react';
 import { useEffect, useState } from 'react';
 import { supabase } from './lib/supabase';
 import './App.css';
@@ -22,6 +22,18 @@ function App() {
 
 
   useEffect(() => {
+    // 0. Initialize SDK
+    init();
+
+    try {
+      if (mountViewport.isAvailable()) {
+        mountViewport();
+        requestFullscreen.ifAvailable();
+      }
+    } catch (e) {
+      console.warn("Viewport/Fullscreen init failed", e);
+    }
+
     // 1. Init Mini App
     try {
       if (mountMiniApp.isSupported()) {
@@ -32,9 +44,6 @@ function App() {
           const tg = (window as any).Telegram.WebApp;
           tg.expand();
           tg.disableVerticalSwipes();
-          // Match Milky White background
-          tg.setHeaderColor('#FAFAF9');
-          tg.setBackgroundColor('#FAFAF9');
         }
       }
     } catch (e) {

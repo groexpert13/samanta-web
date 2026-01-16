@@ -1,6 +1,6 @@
 import React from 'react';
 import { hapticFeedback } from '@telegram-apps/sdk-react';
-import { LayoutGrid, Sparkles, Wallet, Settings2 } from 'lucide-react';
+import { LayoutGrid, Wallet, Settings2 } from 'lucide-react';
 import './BottomNav.css';
 
 export type Tab = 'groups' | 'assistants' | 'billing' | 'settings';
@@ -16,7 +16,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) => {
 
         // Trigger Haptic Feedback for selection change
         if (hapticFeedback.isSupported()) {
-            hapticFeedback.selectionChanged();
+            hapticFeedback.impactOccurred('light');
         }
         onTabChange(tab);
     };
@@ -37,7 +37,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) => {
                     onClick={() => handleTabClick('assistants')}
                     aria-label="Assistants"
                 >
-                    <Sparkles size={28} strokeWidth={1.8} />
+                    <img src="/samanta.png" alt="Assistants" className="nav-icon-img" />
                 </button>
 
                 <button
