@@ -7,9 +7,10 @@ interface SettingsProps {
     username: string | null;
     dbStatus: string;
     telegramId?: number;
+    debugInfo?: string;
 }
 
-const SettingsScreen: React.FC<SettingsProps> = ({ username, dbStatus, telegramId }) => {
+const SettingsScreen: React.FC<SettingsProps> = ({ username, dbStatus, telegramId, debugInfo }) => {
     return (
         <div className="screen-container">
             <h2 className="screen-title">Settings</h2>
@@ -20,6 +21,15 @@ const SettingsScreen: React.FC<SettingsProps> = ({ username, dbStatus, telegramI
                 {telegramId && <p style={{ margin: 0, fontSize: '14px', opacity: 0.7 }}>TG ID: {telegramId}</p>}
                 <p style={{ margin: 0, fontSize: '14px', opacity: 0.7 }}>Status: {dbStatus}</p>
             </div>
+
+            {debugInfo && (
+                <div className="card" style={{ background: '#000', color: '#0f0', border: '1px solid #333' }}>
+                    <h3 style={{ margin: 0, marginBottom: 8, fontSize: '14px', color: '#0f0' }}>Debug Console</h3>
+                    <pre style={{ margin: 0, fontSize: '10px', whiteSpace: 'pre-wrap', fontFamily: 'monospace' }}>
+                        {debugInfo}
+                    </pre>
+                </div>
+            )}
 
             <div className="card">
                 <h3 style={{ margin: 0, marginBottom: 8, fontSize: '18px' }}>Appearance</h3>
