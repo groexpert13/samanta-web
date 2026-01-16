@@ -1,10 +1,10 @@
 :root {
-  /* Design System Colors (Harmonized) */
+  /* Design System Colors */
   --color-veiled-vista: #D2E8D5;
   --color-baltic-sea: #8ABEE8;
   --color-golden-mist: #DEDFA0;
+  --color-charcoal: #262626;
   --color-milky-white: #FAFAF9;
-  --gradient-opacity: 1;
 
   /* Telegram Theme Mappings (Adaptive) */
   --tg-theme-bg-color: #FAFAF9;
@@ -13,16 +13,21 @@
   --tg-theme-secondary-bg-color: rgba(255, 255, 255, 0.4);
   --card-bg: rgba(255, 255, 255, 0.6);
   --card-border: rgba(255, 255, 255, 0.4);
+  --gradient-opacity: 1;
 
-  /* Dark Mode Overrides (Text & Blocks only) */
+  /* Dark Mode Overrides */
   @media (prefers-color-scheme: dark) {
     --tg-theme-bg-color: #1c1c1e;
     --tg-theme-text-color: #ffffff;
     --tg-theme-secondary-bg-color: rgba(0, 0, 0, 0.3);
     --card-bg: rgba(255, 255, 255, 0.1);
     --card-border: rgba(255, 255, 255, 0.15);
-    --gradient-opacity: 0.9;
-    /* Slightly lower for dark mode depth */
+
+    /* Darker, deeper colors for dark mode background */
+    --color-veiled-vista: #1a3a2a;
+    --color-baltic-sea: #1a2a3a;
+    --color-golden-mist: #3a3a1a;
+    --gradient-opacity: 0.6;
   }
 
   /* Safe Area Insets */

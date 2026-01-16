@@ -71,14 +71,15 @@
     width: 28px;
     height: 28px;
     stroke-width: 2px;
-    transition: transform 0.3s ease, stroke 0.3s ease, filter 0.3s ease;
+    transition: transform 0.3s ease, stroke 0.3s ease;
 }
 
 .nav-icon-img {
-    width: 56px;
-    height: 56px;
+    width: 52px;
+    height: 52px;
     object-fit: contain;
-    transition: filter 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+    transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+    /* Optional: Slightly desaturate when not active if needed */
     filter: grayscale(0.2) opacity(0.8);
 }
 
