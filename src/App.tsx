@@ -1,4 +1,4 @@
-import { retrieveLaunchParams, mountMiniApp, miniAppReady, init, mountViewport, requestFullscreen } from '@telegram-apps/sdk-react';
+import { retrieveLaunchParams, mountMiniApp, miniAppReady, init, mountViewport, requestFullscreen, hapticFeedback } from '@telegram-apps/sdk-react';
 import { useEffect, useState } from 'react';
 import { supabase } from './lib/supabase';
 import './App.css';
@@ -14,6 +14,7 @@ import SettingsScreen from './screens/SettingsScreen';
 
 function App() {
   const [username, setUsername] = useState<string | null>(null);
+  const [telegramId, setTelegramId] = useState<number | undefined>(undefined);
   const [dbStatus, setDbStatus] = useState<string>('Checking DB...');
 
   // Navigation State
@@ -23,12 +24,18 @@ function App() {
 
   useEffect(() => {
     // 0. Initialize SDK
-    init();
+    try {
+      init();
+    } catch (e) {
+      console.warn("SDK init failed", e);
+    }
 
     try {
       if (mountViewport.isAvailable()) {
         mountViewport();
-        requestFullscreen.ifAvailable();
+      }
+      if (requestFullscreen.isAvailable()) {
+        requestFullscreen();
       }
     } catch (e) {
       console.warn("Viewport/Fullscreen init failed", e);
@@ -39,7 +46,8 @@ function App() {
       if (mountMiniApp.isSupported()) {
         mountMiniApp();
         miniAppReady();
-        // Request full screen & consistent branding
+
+        // Legacy expand support for older clients
         if (typeof window !== 'undefined' && (window as any).Telegram?.WebApp) {
           const tg = (window as any).Telegram.WebApp;
           tg.expand();
@@ -56,18 +64,16 @@ function App() {
       let firstName: string | undefined;
 
       try {
-        // Use retrieveLaunchParams instead of hooks to avoid crash on non-TG environment
         const lp = retrieveLaunchParams() as any;
         if (lp.initData && lp.initData.user) {
           firstName = lp.initData.user.firstName;
           telegramId = lp.initData.user.id;
           setUsername(firstName || 'User');
+          setTelegramId(telegramId);
         }
       } catch (e) {
         console.warn("LaunchParams failed", e);
-        setDbStatus("No Telegram Data (Local Dev?)");
-        // For testing locally
-        // telegramId = 123456789; 
+        setDbStatus("No Telegram Data");
         return;
       }
 
@@ -107,7 +113,7 @@ function App() {
       case 'billing':
         return <BillingScreen />;
       case 'settings':
-        return <SettingsScreen username={username} dbStatus={dbStatus} />;
+        return <SettingsScreen username={username} dbStatus={dbStatus} telegramId={telegramId} />;
       default:
         return <GroupsScreen />;
     }
@@ -123,7 +129,16 @@ function App() {
       {/* Floating Bottom Navigation */}
       <BottomNav
         activeTab={activeTab}
-        onTabChange={setActiveTab}
+        onTabChange={(tab) => {
+          setActiveTab(tab);
+          try {
+            if (hapticFeedback.impactOccurred.isAvailable()) {
+              hapticFeedback.impactOccurred('light');
+            }
+          } catch (e) {
+            console.warn('Haptics failed', e);
+          }
+        }}
       />
     </div>
   );
