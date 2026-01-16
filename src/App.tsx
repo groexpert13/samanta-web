@@ -76,26 +76,36 @@ function App() {
       let fname: string | undefined;
 
       try {
-        const lp = retrieveLaunchParams() as any;
-        setDebugInfo(prev => prev + `\nLP Platform: ${lp.platform}`);
+        let lp: any;
+        try {
+          lp = retrieveLaunchParams();
+          setDebugInfo(prev => prev + `\nPlatform: ${lp.platform}`);
+        } catch (e: any) {
+          setDebugInfo(prev => prev + `\nLP Catch: ${e.message.substring(0, 20)}`);
+        }
 
-        if (lp.initData) {
-          setDebugInfo(prev => prev + "\nInitData Present");
-          if (lp.initData.user) {
-            fname = lp.initData.user.firstName;
-            tid = lp.initData.user.id;
+        // Try to get data from LP or Fallback to window object
+        const initData = lp?.initData || (typeof window !== 'undefined' && (window as any).Telegram?.WebApp?.initDataUnsafe);
+
+        if (initData) {
+          setDebugInfo(prev => prev + "\nData Found");
+          const user = initData.user;
+          if (user) {
+            fname = user.firstName;
+            tid = user.id;
             setUsername(fname || 'User');
             setTelegramId(tid);
-            setDebugInfo(prev => prev + `\nUser Found: ${tid}`);
+            setDebugInfo(prev => prev + `\nUID: ${tid}`);
           } else {
-            setDebugInfo(prev => prev + "\nUser Missing in InitData");
+            setDebugInfo(prev => prev + "\nUser Missing in Data");
           }
         } else {
-          setDebugInfo(prev => prev + "\nInitData Missing");
+          setDebugInfo(prev => prev + "\nNo InitData (Not in TG?)");
+          setDebugInfo(prev => prev + `\nHref: ${window.location.href.substring(0, 30)}...`);
         }
       } catch (e: any) {
-        console.warn("LaunchParams failed", e);
-        setDebugInfo(prev => prev + `\nLP Error: ${e.message}`);
+        console.warn("User extraction failed", e);
+        setDebugInfo(prev => prev + `\nErr: ${e.message}`);
         setDbStatus("No Telegram Data");
         return;
       }
